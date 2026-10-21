@@ -1,4 +1,4 @@
-# Life.exe
+# Build my life
 
 Turn your real life into a living game. Complete missions, earn XP and coins,
 unlock achievements and grow a virtual island. Pure HTML, CSS and JavaScript —
