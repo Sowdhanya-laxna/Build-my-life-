@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Life.exe tests</title>
+<style>body{font:15px/1.6 system-ui;background:#101814;color:#F2F3EA;padding:20px}.p{color:#A8F0B4}.f{color:#ff8a8a}</style></head>
+<body><h1>Life.exe tests</h1><div id="out"></div>
+<script src="js/config.js"></script><script src="js/progression.js"></script>
+<script src="js/storage.js"></script><script src="js/engine.js"></script>
+<script>
+var out = document.getElementById('out'), pass = 0, fail = 0;
+function t(name, fn) {
+  try { fn(); pass++; out.innerHTML += '<div class="p">✔ ' + name + '</div>'; }
+  catch (e) { fail++; out.innerHTML += '<div class="f">✘ ' + name + ' — ' + e.message + '</div>'; }
+}
+function eq(a, b) { if (a !== b) throw new Error('expected ' + b + ', got ' + a); }
+function setup(d, c) {
+  var s = LX.startGame(LX.createInitialState(), 'Tester').state;
+  return LX.addMission(s, { title: 'Study', category: c || 'learning', difficulty: d || 'medium' }).state;
+}
+
+t('level thresholds match the spec', function () {
+  [0, 100, 250, 450, 700, 1000, 1350, 1750, 2200, 2700].forEach(function (xp, i) { eq(LX.levelThreshold(i + 1), xp); });
+  eq(LX.getLevel(99), 1); eq(LX.getLevel(100), 2); eq(LX.getLevel(2700), 10);
+});
+t('level progress inside a level', function () {
+  var p = LX.levelProgress(180); eq(p.level, 2); eq(p.earned, 80); eq(p.need, 150); eq(p.percent, 53);
+});
+t('Starter Home unlocks at the start', function () { eq(setup().worldObjects.includes('home'), true); });
+t('mission rewards are granted exactly once', function () {
+  var s = setup(), id = s.missions[0].id;
+  s = LX.completeMission(s, id).state; eq(s.player.totalXP, 35); eq(s.player.coins, 8);
+  s = LX.completeMission(s, id).state; eq(s.player.totalXP, 35);
+});
+t('buildings unlock once when requirements are met', function () {
+  var s = setup('epic'); s.player.totalXP = 240; s.categoryXP.learning = 95;
+  s = LX.completeMission(s, s.missions[0].id).state;
+  eq(s.worldObjects.filter(function (x) { return x === 'library'; }).length, 1);
+});
+t('unaffordable purchases are rejected', function () {
+  var r = LX.buyItem(setup(), 'bridge'); eq(!!r.error, true); eq(r.state.inventory.length, 0);
+});
+t('purchases deduct coins and cannot repeat', function () {
+  var s = setup(); s.player.coins = 30;
+  s = LX.buyItem(s, 'bench').state; eq(s.player.coins, 10);
+  s = LX.buyItem(s, 'bench').state; eq(s.player.coins, 10); eq(s.inventory.length, 1);
+});
+t('invalid backups are rejected', function () {
+  eq(LX.parseBackup('{"nope":1}'), null); eq(LX.parseBackup('garbage'), null);
+});
+out.insertAdjacentHTML('afterbegin', '<h2>' + pass + ' passed, ' + fail + ' failed</h2>');
+</script></body></html>

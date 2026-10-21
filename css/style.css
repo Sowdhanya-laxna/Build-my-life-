@@ -1,0 +1,33 @@
+:root{--bg:#101814;--sf:#19231E;--ac:#A8F0B4;--am:#F5C76B;--lv:#B7A5FF;--tx:#F2F3EA;--mu:#A3B1A5;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{max-width:760px;margin:0 auto;padding:14px}
+header,.card{background:var(--sf);border-radius:14px;padding:14px;margin-bottom:12px}
+.bar{height:10px;background:#0c120f;border-radius:6px;margin:8px 0;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--lv));transition:width .4s}
+small,.mu{color:var(--mu)}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+button,select,input,textarea{font:inherit;border-radius:10px;border:1px solid #2c3b33;background:#0f1612;color:var(--tx);padding:8px 12px}
+button{background:var(--ac);color:#10241a;border:0;font-weight:600;cursor:pointer;min-height:40px}
+button.g,nav button{background:var(--sf);color:var(--tx);border:1px solid #2c3b33}
+nav button.on{background:var(--lv);color:#1a1433;border:0}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--am);outline-offset:2px}
+ul{list-style:none;padding:0;margin:0}
+li{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #223029}
+li:last-child{border:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.row input{flex:1;min-width:160px}
+svg.scene{width:100%;height:auto;border-radius:14px;display:block;margin-bottom:8px}
+.o{animation:bob 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes bob{50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.o{animation:none}.bar i{transition:none}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.lock{opacity:.4}
+h1{margin:0;color:var(--ac)}
+h2{margin:0 0 8px;font-size:17px;color:var(--am)}
+textarea{width:100%;min-height:90px}
+.bw{display:flex;align-items:center;gap:8px;margin:4px 0}
+.bw span{width:110px}
+.bw .bar{flex:1;margin:0}
+.welcome{margin-top:12vh;text-align:center}
+#toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--am);color:#2a1d00;padding:10px 16px;border-radius:12px;font-weight:600;display:none;max-width:90%;z-index:5}
